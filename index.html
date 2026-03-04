@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Тренажер Категория I и II, Блок 1</title>
+<title>Тренажер Категория I, Блок 2</title>
 <style>
 :root{
   --bg:#f6f8fb;
@@ -13,9 +13,11 @@
   --border:rgba(15,23,42,.12);
   --shadow:0 12px 30px rgba(15,23,42,.10);
   --primary:#2D2B96;
+  --primary2:#1e3a8a;
   --accent:#18a4e0;
   --good:#16a34a;
   --bad:#dc2626;
+  --warn:#f59e0b;
   --chip:rgba(45,43,150,.08);
 }
 *{box-sizing:border-box}
@@ -41,12 +43,22 @@ body{
   border-radius:18px;
   box-shadow:var(--shadow);
 }
-
 .landing{padding:22px}
 .landing h2{margin:0 0 6px;font-size:34px;letter-spacing:-.02em}
-.landing .sub{margin:0;color:var(--muted);font-size:16px;line-height:1.55}
-.landing .foot{margin:10px 0 0;color:var(--muted);font-size:14px}
-
+.landing .sub{margin:0;color:var(--muted);font-size:16px;line-height:1.5}
+.hint{margin-top:14px;padding:12px 14px;border-radius:14px;background:rgba(24,164,224,.08);border:1px solid rgba(24,164,224,.18);color:#0b3b52;font-size:14px}
+.formrow{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:14px}
+.input{
+  flex:1;
+  min-width:220px;
+  padding:14px 14px;
+  border-radius:14px;
+  border:1px solid var(--border);
+  background:#fff;
+  font-size:16px;
+  outline:none;
+}
+.input:focus{border-color:rgba(45,43,150,.35);box-shadow:0 0 0 4px rgba(45,43,150,.10)}
 .btn{
   padding:12px 14px;
   border-radius:14px;
@@ -56,22 +68,20 @@ body{
   font-weight:600;
   font-size:15px;
   cursor:pointer;
-  transition:transform .05s ease, box-shadow .15s ease, background .15s ease, border-color .15s ease, filter .15s ease;
+  transition:transform .05s ease, box-shadow .15s ease, background .15s ease, border-color .15s ease;
 }
 .btn:active{transform:translateY(1px)}
-.btn[disabled]{opacity:.55;cursor:not-allowed;transform:none}
 .btnPrimary{background:linear-gradient(135deg,var(--primary),var(--accent));color:#fff;border:none;box-shadow:0 12px 24px rgba(45,43,150,.22)}
 .btnPrimary:hover{filter:saturate(1.05)}
 .btnGhost{background:transparent}
-
 .btnRow{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
-
-.noticeBox{margin-top:12px;padding:12px 14px;border-radius:14px;border:1px solid var(--border);background:rgba(45,43,150,.05);color:var(--muted);font-size:14px}
+.notice{margin-top:12px;color:var(--muted);font-size:14px}
+.notice strong{color:var(--text)}
+.noticeBox{margin-top:12px;padding:12px 14px;border-radius:14px;border:1px solid var(--border);background:rgba(45,43,150,.05)}
 .hidden{display:none !important}
 
 .trainer{margin-top:14px;padding:16px}
 .topbar{display:flex;flex-direction:column;gap:10px;align-items:stretch;margin-bottom:12px}
-.actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-start}
 .chips{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
 .chip{
   padding:8px 10px;border-radius:999px;background:var(--chip);
@@ -79,6 +89,7 @@ body{
   font-size:13px;font-weight:600
 }
 .timer{font-variant-numeric:tabular-nums}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
 
 .qcard{padding:16px;border-radius:16px;border:1px solid var(--border);background:rgba(255,255,255,.90)}
 .qtext{font-size:18px;line-height:1.45;white-space:pre-wrap}
@@ -95,56 +106,28 @@ body{
 .feedback{margin-top:12px;padding:12px 14px;border-radius:14px;border:1px solid var(--border);background:#fff}
 .feedback.good{border-color:rgba(22,163,74,.25);background:rgba(22,163,74,.06)}
 .feedback.bad{border-color:rgba(220,38,38,.25);background:rgba(220,38,38,.06)}
+.small{color:var(--muted);font-size:13px}
 .footerline{margin-top:12px;color:var(--muted);font-size:12px}
 
 @media (max-width:520px){
   .landing h2{font-size:28px}
   .btn{width:100%}
+  .formrow{gap:10px}
 }
 
-/* iOS/iPadOS: make radio buttons consistent size */
-.opt input[type="radio"]{
-  -webkit-appearance:none;
-  appearance:none;
-  width:18px;
-  height:18px;
-  border:2px solid rgba(15,23,42,.25);
-  border-radius:50%;
-  background:#fff;
-  display:inline-grid;
-  place-content:center;
-  flex:0 0 18px;
-  margin-top:3px;
-}
-.opt input[type="radio"]::before{
-  content:"";
-  width:10px;
-  height:10px;
-  border-radius:50%;
-  transform:scale(0);
-  transition:transform .12s ease-in-out;
-  background:var(--primary);
-}
-.opt input[type="radio"]:checked::before{transform:scale(1);}
-.opt input[type="radio"]:focus-visible{
-  outline:3px solid rgba(45,43,150,.20);
-  outline-offset:2px;
-}
-
-/* Hide base stats line */
-#bankInfo{display:none !important;}
-
+/* confirm modal */
 .modalOverlay{
   position:fixed;
   inset:0;
   background:rgba(15,23,42,.45);
-  display:flex;
+  display:none;
   align-items:center;
   justify-content:center;
   padding:18px;
   z-index:9999;
 }
-.modalCard{
+.modalOverlay.show{display:flex}
+.modal{
   width:min(520px, 100%);
   background:var(--card);
   border:1px solid var(--border);
@@ -152,9 +135,10 @@ body{
   box-shadow:var(--shadow);
   padding:16px;
 }
-.modalTitle{font-size:18px;font-weight:700;margin:0 0 8px}
-.modalText{font-size:15px;line-height:1.45;color:var(--text);margin:0 0 14px;white-space:pre-wrap}
-.modalBtns{display:flex;gap:10px;justify-content:flex-end;flex-wrap:wrap}
+.modalTitle{font-size:16px;font-weight:800;margin:0 0 8px}
+.modalText{margin:0;color:var(--text);line-height:1.45;white-space:pre-wrap}
+.modalBtns{display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end;margin-top:14px}
+
 </style>
 </head>
 <body>
@@ -164,40 +148,43 @@ body{
       <div class="logo" aria-hidden="true"></div>
       <div>
         <h1>Тренажер для подготовки к аттестации</h1>
-        <p>На право осуществления операций с ценными бумагами, Категория I и II, Блок 1</p>
+        <p>На право осуществления операций с ценными бумагами, Категория I, Блок 2</p>
       </div>
     </div>
+    
   </div>
 
+  
   <div id="landing" class="card landing">
     <h2>Перед началом</h2>
     <p class="sub">
-      Этот тренажер предназначен только для учебных целей. Автор приложил разумные усилия, чтобы обеспечить корректность материалов, но не гарантирует 100% точность и актуальность. Пожалуйста, сверяйтесь с действующим законодательством и официальными источниками.
+      Этот тренажер предназначен только для учебных целей. Автор приложил разумные усилия, чтобы обеспечить корректность материалов, 
+      но не гарантирует 100% точность и актуальность. Пожалуйста, сверяйтесь с действующим законодательством и официальными источниками.
     </p>
     <div class="btnRow">
-      <button id="startBtn" class="btn btnPrimary" type="button" disabled>Продолжить</button>
+      <button id="startBtn" class="btn btnPrimary" type="button">Продолжить</button>
     </div>
-    
-    <div class="foot">Статистика и прогресс сохраняются локально на этом устройстве.</div>
+    <div class="small">Статистика и прогресс сохраняются локально на этом устройстве.</div>
   </div>
+
 
   <div id="trainer" class="card trainer hidden">
     <div class="topbar">
       <div class="actions">
-        <button id="modeTestBtn" class="btn" type="button">Тест (60, 45 минут)</button>
+        <button id="modeTestBtn" class="btn" type="button">Тест (40, 45 минут)</button>
         <button id="modeTrainBtn" class="btn" type="button">Режим тренировки</button>
         <button id="repeatWrongBtn" class="btn" type="button">Повторить только ошибочные</button>
         <button id="resetUserBtn" class="btn" type="button">Сбросить статистику</button>
       </div>
-      <div class="chips">
+    <div class="chips">
         <div id="modeChip" class="chip">Режим: тест</div>
         <div id="timerChip" class="chip timer">45:00</div>
-        <div id="progressChip" class="chip">Вопрос 1 из 60</div>
+        <div id="progressChip" class="chip">Вопрос 1 из 40</div>
         <div id="scoreChip" class="chip">Правильных ответов: 0% (0 из 0)</div>
       </div>
-    </div>
+      </div>
 
-    <div class="qcard" id="qCard">
+    <div class="qcard">
       <div id="qText" class="qtext"></div>
       <div id="options" class="options"></div>
       <div class="btnRow" style="margin-top:12px">
@@ -205,124 +192,50 @@ body{
         <button id="nextBtn" class="btn hidden" type="button">Следующий</button>
       </div>
       <div id="feedback" class="feedback hidden"></div>
-      <div id="bankInfo" class="footerline"></div>
-    </div>
+      </div>
   </div>
 </div>
 
-<div id="confirmOverlay" class="modalOverlay hidden" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
-  <div class="modalCard">
-    <div id="confirmTitle" class="modalTitle">Подтверждение</div>
-    <div id="confirmText" class="modalText"></div>
-    <div class="modalBtns">
-      <button id="confirmYesBtn" class="btn btnPrimary" type="button">Да</button>
-      <button id="confirmNoBtn" class="btn" type="button">Нет</button>
+
+  <div id="confirmOverlay" class="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="confirmTitle" aria-describedby="confirmText">
+    <div class="modal">
+      <p id="confirmTitle" class="modalTitle">Подтверждение</p>
+      <p id="confirmText" class="modalText"></p>
+      <div class="modalBtns">
+        <button id="confirmNoBtn" class="btn" type="button">Нет</button>
+        <button id="confirmYesBtn" class="btn btnPrimary" type="button">Да</button>
+      </div>
     </div>
   </div>
-</div>
 
 <script>
 let ALL_QUESTIONS = [];
-let BANK_REPORT = null;
-
-const EXAM_COUNT = 60;
+let EXAM_COUNT = 40;
 const EXAM_SECONDS = 45 * 60;
 
+// Load questions from external JSON (keep this file next to the HTML on Netlify)
+async function loadQuestions(){
+  const response = await fetch("questions.json", { cache: "no-store" });
+  if(!response.ok) throw new Error("Не удалось загрузить questions.json: " + response.status);
+  ALL_QUESTIONS = await response.json();
+  EXAM_COUNT = Math.min(40, ALL_QUESTIONS.length || 0);
+
+  // Update button label to show actual count
+  const btn = document.getElementById("modeTestBtn");
+  if(btn) btn.textContent = "Тест (" + EXAM_COUNT + ", 45 минут)";
+}
+
+const QUESTIONS_PROMISE = loadQuestions().catch((e)=>{ console.error(e); throw e; });
 const $ = (id) => document.getElementById(id);
 
-async function loadQuestions(){
-  const res = await fetch("./questions_block1.json", { cache: "no-store" });
-  if(!res.ok) throw new Error("Failed to load questions_block1.json: " + res.status);
-  const data = await res.json();
-  if(!Array.isArray(data) || data.length === 0) throw new Error("Question bank is empty or invalid.");
-  ALL_QUESTIONS = data;
+function escapeHtml(s){
+  return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/\'/g,"&#39;");
 }
 
-function normalizeAndAuditQuestions(){
-  const total = Array.isArray(ALL_QUESTIONS) ? ALL_QUESTIONS.length : 0;
-  let fixed = 0;
-  const problematic = [];
-  const normalized = (Array.isArray(ALL_QUESTIONS) ? ALL_QUESTIONS : []).map((q, idx) => {
-    const src = (q && typeof q === "object") ? q : {};
-    const nq = {
-      question: typeof src.question === "string" ? src.question : String(src.question ?? ""),
-      answers: Array.isArray(src.answers) ? src.answers.map(a => (typeof a === "string" ? a : String(a ?? ""))) : [],
-      correct: Array.isArray(src.correct) ? src.correct.map(x => parseInt(x, 10)).filter(x => Number.isFinite(x)) : []
-    };
-
-    const before = JSON.stringify(src);
-
-    nq.question = nq.question.replace(/\r\n/g, "\n");
-    nq.answers = nq.answers.map(a => a.replace(/\r\n/g, "\n"));
-
-    nq.correct = nq.correct.filter(i => i >= 0 && i < nq.answers.length);
-    if(nq.correct.length === 0) nq.correct = [0];
-    nq.correct = Array.from(new Set(nq.correct));
-
-    const after = JSON.stringify(nq);
-    if(before !== after) fixed += 1;
-
-    if(!nq.question.trim() || nq.answers.length < 2){
-      problematic.push({ idx, reason: (!nq.question.trim() ? "empty_question" : "") + (nq.answers.length < 2 ? " insufficient_answers" : "") });
-    }
-    return nq;
-  });
-
-  ALL_QUESTIONS = normalized;
-  BANK_REPORT = { total, fixed, problematic: problematic.length };
-  console.info("Question bank audit:", BANK_REPORT);
-  if(problematic.length) console.warn("Problematic questions (after normalization):", problematic.slice(0, 50));
-  return BANK_REPORT;
-}
-
-function scrollToBottom(){
-  setTimeout(() => {
-    try{
-      window.scrollTo({ top: document.documentElement.scrollHeight, behavior: "smooth" });
-    }catch(e){
-      window.scrollTo(0, document.documentElement.scrollHeight);
-    }
-  }, 60);
-}
-
-function scrollQuestionToTop(){
-  setTimeout(() => {
-    const el = $("qCard") || $("trainer");
-    if(!el) return;
-    try{
-      el.scrollIntoView({ behavior: "smooth", block: "start" });
-    }catch(e){
-      try{ el.scrollIntoView(true); }catch(_){}
-    }
-  }, 60);
-}
-
-const STORAGE_KEY = "avesta_block1_single";
-
-function loadUser(){
-  const raw = localStorage.getItem(STORAGE_KEY);
-  if(!raw) return null;
-  try{ return JSON.parse(raw); }catch(e){ return null; }
-}
-
-function saveUser(data){
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-}
-
-function defaultUserData(){
-  return {
-    createdAt: new Date().toISOString(),
-    stats: {
-      seen: {},
-      wrong: {},
-      right: {},
-    },
-    lastSession: null
-  };
-}
 
 const state = {
-  mode: "test",
+  username: "",
+  mode: "test", // test | train
   onlyWrong: false,
   exam: {
     ids: [],
@@ -335,120 +248,22 @@ const state = {
   },
   currentQ: null,
   currentId: null,
+  feedbackShown: false,
 };
 
-function show(el, on=true){ el.classList.toggle("hidden", !on); }
+(el, on=true){ el.classList.toggle("hidden", !on); }
 
-function updateModeChip(){
-  $("modeChip").textContent = "Режим: " + (state.mode === "test" ? "тест" : (state.onlyWrong ? "ошибочные" : "тренировка"));
+function setLandingMessage(text){
+  const box = $("loginNotice");
+  box.textContent = text;
+  show(box, true);
 }
 
-function updateTimerChip(){
-  const s = Math.max(0, Math.floor(state.exam.remaining));
-  const mm = String(Math.floor(s/60)).padStart(2,"0");
-  const ss = String(s%60).padStart(2,"0");
-  $("timerChip").textContent = mm + ":" + ss;
-}
+function normalizeUsername(u){ return (u || "").trim(); }
 
-function updateProgressChip(){
-  if(state.mode === "test") $("progressChip").textContent = "Вопрос " + (state.exam.idx + 1) + " из " + EXAM_COUNT;
-  else $("progressChip").textContent = "Вопрос";
-}
-
-function updateScoreChip(){
-  const a = state.exam.answered || 0;
-  const c = state.exam.correct || 0;
-  const pct = a ? Math.round((c/a)*100) : 0;
-  $("scoreChip").textContent = "Правильных ответов: " + pct + "% (" + c + " из " + a + ")";
-}
-
-function updateBankInfo(){
-  const el = $("bankInfo");
-  if(!el) return;
-  const r = BANK_REPORT;
-  if(!r) { el.textContent = ""; return; }
-  el.textContent = "База вопросов: " + r.total + " | Исправлено: " + r.fixed + " | Помечено: " + r.problematic;
-}
-
-function persistSession(){
-  const ud = loadUser() || defaultUserData();
-  ud.lastSession = {
-    mode: state.mode,
-    onlyWrong: state.onlyWrong,
-    exam: {
-      ids: state.exam.ids,
-      idx: state.exam.idx,
-      startedAt: state.exam.startedAt,
-      remaining: state.exam.remaining,
-      answered: state.exam.answered,
-      correct: state.exam.correct
-    }
-  };
-  saveUser(ud);
-}
-
-function stopTimer(){
-  if(state.exam.timer) clearInterval(state.exam.timer);
-  state.exam.timer = null;
-}
-
-function startTimer(){
-  state.exam.timer = setInterval(() => {
-    if(state.mode !== "test") return;
-    state.exam.remaining -= 1;
-    updateTimerChip();
-    persistSession();
-    if(state.exam.remaining <= 0) {
-      state.exam.remaining = 0;
-      updateTimerChip();
-      stopTimer();
-      showFeedback("Время вышло. Тест завершен.", false, true);
-      $("checkBtn").disabled = true;
-      $("nextBtn").disabled = true;
-    }
-  }, 1000);
-}
-
-function pickRandomIds(n){
-  const ids = ALL_QUESTIONS.map((_,i)=>i);
-  for(let i=ids.length-1;i>0;i--) {
-    const j=Math.floor(Math.random()*(i+1));
-    [ids[i],ids[j]]=[ids[j],ids[i]];
-  }
-  return ids.slice(0,n);
-}
-
-function getUserStats(){
-  const ud = loadUser() || defaultUserData();
-  return ud.stats;
-}
-
-function bumpStat(id, isCorrect){
-  const ud = loadUser() || defaultUserData();
-  const s = ud.stats;
-  s.seen[id] = (s.seen[id]||0) + 1;
-  if(isCorrect) s.right[id] = (s.right[id]||0) + 1;
-  else s.wrong[id] = (s.wrong[id]||0) + 1;
-  saveUser(ud);
-}
-
-function weightedPickId(candidates){
-  const stats = getUserStats();
-  let total = 0;
-  const weights = candidates.map(id => {
-    const wrong = stats.wrong[id] || 0;
-    const right = stats.right[id] || 0;
-    const seen = stats.seen[id] || 0;
-    let w = 1;
-    if(state.onlyWrong) w = wrong > 0 ? (2 + wrong*3) : 0.1;
-    else {
-      w = 1 + wrong*3 + Math.max(0, 2 - right*0.5);
-      w = w / (1 + seen*0.15);
-      if(w < 0.2) w = 0.2;
-    }
-    total += w;
-    return w;
-  });
+function startAppForUser(u){
+  state.username = u;
+  
   let r = Math.random() * total;
   for(let i=0;i<candidates.length;i++) {
     r -= weights[i];
@@ -466,18 +281,20 @@ function pickNextTrainingQuestion(){
 function showQuestionById(id){
   state.currentId = id;
   state.currentQ = ALL_QUESTIONS[id];
+  state.feedbackShown = false;
   $("checkBtn").disabled = false;
   $("nextBtn").disabled = true;
   show($("nextBtn"), false);
   show($("feedback"), false);
 
+  // Convert literal \\n sequences into real line breaks
   const text = String(state.currentQ.question || "").replace(/\\n/g, "\n");
   $("qText").textContent = text;
 
   renderOptions(state.currentQ);
   updateProgressChip();
-  scrollQuestionToTop();
 }
+
 
 function renderOptions(q){
   const wrap = $("options");
@@ -485,29 +302,37 @@ function renderOptions(q){
   const multi = (q.correct && q.correct.length > 1);
   const name = "qopt";
 
+  // Build list with original indexes and shuffle it (so correct answer stays trackable)
   const items = (q.answers || []).map((text, origIndex) => ({ text, origIndex }));
   for(let i = items.length - 1; i > 0; i--){
     const j = Math.floor(Math.random() * (i + 1));
-    const tmp = items[i];
-    items[i] = items[j];
-    items[j] = tmp;
+    [items[i], items[j]] = [items[j], items[i]];
   }
 
   items.forEach((item) => {
     const row = document.createElement("label");
     row.className = "opt";
+
     const input = document.createElement("input");
     input.type = multi ? "checkbox" : "radio";
     input.name = name;
+    // value is ORIGINAL index, so checking uses original correct mapping
     input.value = String(item.origIndex);
+
     input.addEventListener("change", () => {
-      Array.from(wrap.querySelectorAll(".opt")).forEach(el => el.classList.remove("selected"));
-      if(!multi) row.classList.add("selected");
-      else row.classList.toggle("selected", input.checked);
+      // highlight selection
+      if(!multi){
+        Array.from(wrap.querySelectorAll(".opt")).forEach(el => el.classList.remove("selected"));
+        row.classList.add("selected");
+      } else {
+        row.classList.toggle("selected", input.checked);
+      }
     });
+
     const span = document.createElement("div");
     span.className = "label";
     span.textContent = item.text;
+
     row.appendChild(input);
     row.appendChild(span);
     wrap.appendChild(row);
@@ -527,148 +352,71 @@ function sameSet(a,b){
   return true;
 }
 
+function scrollToFeedback(){
+  const box = $("feedback");
+  if(!box) return;
+
+  const prefersReduced = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const behavior = prefersReduced ? "auto" : "smooth";
+
+  const doScroll = () => {
+    try {
+      box.scrollIntoView({ behavior, block: "end" });
+    } catch (e) {
+      box.scrollIntoView();
+    }
+  };
+
+  // iOS Safari sometimes needs a tick (or two) after DOM updates
+  setTimeout(doScroll, 0);
+  setTimeout(doScroll, 180);
+}
+
 function showFeedback(text, isGood, sticky=false){
   const box = $("feedback");
   box.textContent = text;
   box.classList.remove("good","bad");
   box.classList.add(isGood ? "good" : "bad");
   show(box, true);
-
-  // After rendering feedback, scroll to the bottom so the whole message is visible (iPhone friendly)
-  scrollToBottom();
-
+  scrollToFeedback();
   if(!sticky) {
     // keep visible until next question
   }
 }
 
-function initExam(){
-  state.mode = "test";
-  state.onlyWrong = false;
-  state.exam.ids = pickRandomIds(EXAM_COUNT);
-  state.exam.idx = 0;
-  state.exam.remaining = EXAM_SECONDS;
-  state.exam.startedAt = new Date().toISOString();
-  state.exam.answered = 0;
-  state.exam.correct = 0;
-  stopTimer();
-  startTimer();
-  updateModeChip();
-  updateTimerChip();
-  updateProgressChip();
-  updateScoreChip();
-  showQuestionById(state.exam.ids[state.exam.idx]);
-  persistSession();
-}
-
-function resumeExam(){
-  state.mode = "test";
-  state.onlyWrong = false;
-  stopTimer();
-  startTimer();
-  updateModeChip();
-  updateTimerChip();
-  updateProgressChip();
-  updateScoreChip();
-  showQuestionById(state.exam.ids[state.exam.idx]);
-}
-
-function initTraining(){
-  state.mode = "train";
-  state.onlyWrong = false;
-  stopTimer();
-  state.exam.remaining = EXAM_SECONDS;
-  updateModeChip();
-  updateTimerChip();
-  updateProgressChip();
-  updateScoreChip();
-  pickNextTrainingQuestion();
-  persistSession();
-}
-
-function initWrongOnly(){
-  state.mode = "train";
-  state.onlyWrong = true;
-  stopTimer();
-  state.exam.remaining = EXAM_SECONDS;
-  updateModeChip();
-  updateTimerChip();
-  updateProgressChip();
-  updateScoreChip();
-  pickNextTrainingQuestion();
-  persistSession();
-}
-
-function startApp(){
-  show($("landing"), false);
-  show($("trainer"), true);
-
-  const ud = loadUser() || defaultUserData();
-  const last = ud.lastSession;
-
-  if(last && last.mode) state.mode = last.mode;
-  if(last && typeof last.onlyWrong === "boolean") state.onlyWrong = last.onlyWrong;
-
-  if(last && last.exam && state.mode === "test" && last.exam.ids && last.exam.ids.length === EXAM_COUNT) {
-    state.exam = { ...state.exam, ...last.exam };
-    if(!state.exam.remaining || state.exam.remaining < 0) state.exam.remaining = EXAM_SECONDS;
-    updateModeChip();
-    updateTimerChip();
-    updateProgressChip();
-    updateScoreChip();
-    updateBankInfo();
-    resumeExam();
-    return;
-  }
-
-  updateBankInfo();
-  initExam();
-}
-
-// Confirm modal
-const confirmOverlay = $("confirmOverlay");
-const confirmText = $("confirmText");
-const confirmYesBtn = $("confirmYesBtn");
-const confirmNoBtn = $("confirmNoBtn");
-let confirmOnYes = null;
+// Confirm modal (instead of window.confirm for better iOS behavior)
+let __confirmOnYes = null;
 
 function openConfirm(message, onYes){
-  confirmOnYes = (typeof onYes === "function") ? onYes : null;
-  confirmText.textContent = String(message || "");
-  confirmOverlay.classList.remove("hidden");
-  setTimeout(() => { confirmYesBtn.focus(); }, 0);
+  __confirmOnYes = typeof onYes === "function" ? onYes : null;
+  $("confirmText").textContent = message;
+  $("confirmOverlay").classList.add("show");
 }
 
 function closeConfirm(){
-  confirmOverlay.classList.add("hidden");
-  confirmText.textContent = "";
-  confirmOnYes = null;
+  $("confirmOverlay").classList.remove("show");
+  __confirmOnYes = null;
 }
 
-confirmYesBtn.addEventListener("click", () => {
-  const fn = confirmOnYes;
+$("confirmNoBtn").addEventListener("click", closeConfirm);
+
+$("confirmYesBtn").addEventListener("click", () => {
+  const fn = __confirmOnYes;
   closeConfirm();
   if(fn) fn();
 });
-confirmNoBtn.addEventListener("click", closeConfirm);
-confirmOverlay.addEventListener("click", (e) => {
-  if(e.target === confirmOverlay) closeConfirm();
+
+// close on overlay click
+$("confirmOverlay").addEventListener("click", (e) => {
+  if(e.target === $("confirmOverlay")) closeConfirm();
 });
+
+// close on Escape
 document.addEventListener("keydown", (e) => {
-  if(!confirmOverlay.classList.contains("hidden") && e.key === "Escape") closeConfirm();
+  if(e.key === "Escape" && $("confirmOverlay").classList.contains("show")) closeConfirm();
 });
 
-$("modeTestBtn").addEventListener("click", () => openConfirm("Вы действительно хотите перейти в режим теста?", initExam));
-$("modeTrainBtn").addEventListener("click", () => openConfirm("Вы действительно хотите перейти в режим тренировки?", initTraining));
-$("repeatWrongBtn").addEventListener("click", () => openConfirm("Вы действительно хотите повторить только ошибочные вопросы?", initWrongOnly));
 
-$("resetUserBtn").addEventListener("click", () => {
-  openConfirm("Вы действительно хотите сбросить статистику?", () => {
-    localStorage.removeItem(STORAGE_KEY);
-    initExam();
-    showFeedback("Статистика сброшена.", true);
-  });
-});
 
 $("checkBtn").addEventListener("click", () => {
   if(!state.currentQ) return;
@@ -679,7 +427,9 @@ $("checkBtn").addEventListener("click", () => {
   }
   const correct = state.currentQ.correct || [];
   const ok = sameSet(sel, correct);
+  state.feedbackShown = true;
 
+  // update score counters
   state.exam.answered += 1;
   if(ok) state.exam.correct += 1;
   updateScoreChip();
@@ -687,9 +437,13 @@ $("checkBtn").addEventListener("click", () => {
   bumpStat(state.currentId, ok);
   persistSession();
 
+  // show correct answer text
   const correctText = correct.map(i => state.currentQ.answers[i]).join(" | ");
-  if(ok) showFeedback("Верно. Правильный ответ: " + correctText, true);
-  else showFeedback("Неверно. Правильный ответ: " + correctText, false);
+  if(ok) {
+    showFeedback("Верно. Правильный ответ: " + correctText, true);
+  } else {
+    showFeedback("Неверно. Правильный ответ: " + correctText, false);
+  }
 
   $("checkBtn").disabled = true;
   $("nextBtn").disabled = false;
@@ -714,32 +468,88 @@ $("nextBtn").addEventListener("click", () => {
   }
 });
 
-async function boot(){
-  const btn = $("startBtn");
-  const notice = null;
-
-  try{
-    await loadQuestions();
-    normalizeAndAuditQuestions();
-
-    // ensure storage exists
-    if(!loadUser()) saveUser(defaultUserData());
-
-    btn.disabled = false;
-    
-  }catch(e){
-    console.error(e);
-    btn.disabled = true;
-    
-  }
-}
-
-$("startBtn").addEventListener("click", () => {
-  if($("startBtn").disabled) return;
-  startApp();
+$("modeTestBtn").addEventListener("click", () => {
+  const msg = (state.mode === "test")
+    ? "Вы действительно хотите начать новый тест?"
+    : "Вы действительно хотите перейти в режим теста?";
+  openConfirm(msg, () => {
+    initExam();
+  });
+});
+$("modeTrainBtn").addEventListener("click", () => {
+  openConfirm("Вы действительно хотите перейти в режим тренировки?", initTraining);
+});
+$("repeatWrongBtn").addEventListener("click", () => {
+  openConfirm("Вы действительно хотите повторить только ошибочные вопросы?", initWrongOnly);
 });
 
-boot();
+$("resetUserBtn").addEventListener("click", () => {
+  openConfirm("Вы действительно хотите сбросить статистику?", () => {
+    if(!state.username) return;
+    const key = keyForUser(state.username);
+    localStorage.removeItem(key);
+    // restart
+    initExam();
+    showFeedback("Статистика сброшена.", true);
+  });
+});
+
+
+
+$("loginBtn").addEventListener("click", () => {
+  const u = normalizeUsername($("usernameInput").value);
+  if(!u) {
+    setLandingMessage("Введите username, чтобы продолжить.");
+    return;
+  }
+  const existing = loadUser(u);
+  if(existing) {
+    setLandingMessage("Рад видеть вас снова. Загружаю сохраненную статистику.");
+  } else {
+    saveUser(u, defaultUserData());
+    setLandingMessage("Добро пожаловать. Создаем новый профиль. Статистика начнет формироваться с этого момента.");
+  }
+
+  // Show a separate Continue button below the message
+  window.__pendingUsername = u;
+  $("continueRow").style.display = "block";
+
+  // Keep the login button in place, but disable it to avoid repeated clicks
+  $("loginBtn").disabled = true;
+  $("usernameInput").disabled = true;
+});
+
+$("continueBtn").addEventListener("click", async () => {
+  const u = window.__pendingUsername;
+  if(!u) return;
+  try {
+    await QUESTIONS_PROMISE;
+  } catch (e) {
+    setLandingMessage("Ошибка загрузки базы вопросов (questions.json). Проверьте, что файл questions.json лежит рядом с HTML и вы открываете страницу через сайт/сервер (например Netlify), а не как file://. Подробности: " + (e && e.message ? e.message : e));
+    $("loginBtn").disabled = false;
+    $("usernameInput").disabled = false;
+    return;
+  }
+  startAppForUser(u);
+});
+
+// Allow Enter to trigger
+$("usernameInput").addEventListener("keydown", (e) => {
+  if(e.key === "Enter") $("loginBtn").click();
+});
+
+document.getElementById("startBtn").addEventListener("click", async () => {
+  try {
+    await QUESTIONS_PROMISE;
+  } catch (e) {
+    alert("Ошибка загрузки базы вопросов. Проверьте файл questions.json.");
+    return;
+  }
+  document.getElementById("landing").classList.add("hidden");
+  document.getElementById("trainer").classList.remove("hidden");
+  initExam();
+});
+
 </script>
 </body>
 </html>
