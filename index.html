@@ -177,7 +177,7 @@ body{
     <div class="btnRow">
       <button id="startBtn" class="btn btnPrimary" type="button" disabled>Продолжить</button>
     </div>
-    <div id="startNotice" class="noticeBox">Загружаю базу вопросов...</div>
+    
     <div class="foot">Статистика и прогресс сохраняются локально на этом устройстве.</div>
   </div>
 
@@ -716,7 +716,7 @@ $("nextBtn").addEventListener("click", () => {
 
 async function boot(){
   const btn = $("startBtn");
-  const notice = $("startNotice");
+  const notice = null;
 
   try{
     await loadQuestions();
@@ -726,11 +726,11 @@ async function boot(){
     if(!loadUser()) saveUser(defaultUserData());
 
     btn.disabled = false;
-    notice.textContent = "База вопросов загружена.";
+    
   }catch(e){
     console.error(e);
     btn.disabled = true;
-    notice.textContent = "Ошибка загрузки базы вопросов. Проверьте, что questions_block1.json загружен рядом с index.html.";
+    
   }
 }
 
